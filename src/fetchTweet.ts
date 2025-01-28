@@ -45,7 +45,6 @@ export async function fetchTweets(username: string) {
 
     console.log(filteredTweets);
     return filteredTweets;
-
   } catch (error) {
     console.error("Error fetching tweets:", error);
     return [];
