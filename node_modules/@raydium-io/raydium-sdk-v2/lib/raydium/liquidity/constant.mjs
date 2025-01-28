@@ -1,0 +1,2 @@
+import o from"bn.js";var E=new o(25),n=new o(1e4),t={4:3,5:3};export{n as LIQUIDITY_FEES_DENOMINATOR,E as LIQUIDITY_FEES_NUMERATOR,t as LIQUIDITY_VERSION_TO_SERUM_VERSION};
+//# sourceMappingURL=constant.mjs.map

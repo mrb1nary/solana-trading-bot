@@ -1,0 +1,2 @@
+import o from"bn.js";var B=new o(1e6);function i(r,N,t){return r.mul(N).add(t).sub(new o(1)).div(t)}function e(r,N,t){return r.mul(N).div(t)}var n=class{static tradingFee(N,t){return i(N,t,B)}static protocolFee(N,t){return e(N,t,B)}static fundFee(N,t){return e(N,t,B)}};export{n as CpmmFee,B as FEE_RATE_DENOMINATOR_VALUE,i as ceilDiv,e as floorDiv};
+//# sourceMappingURL=fee.mjs.map

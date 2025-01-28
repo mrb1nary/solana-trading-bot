@@ -14,20 +14,86 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchLLM = fetchLLM;
 const groq_sdk_1 = __importDefault(require("groq-sdk"));
+const axios_1 = __importDefault(require("axios"));
 const groq = new groq_sdk_1.default({ apiKey: process.env.GROQ_API_KEY });
-function fetchLLM(tweetData) {
+// System prompt for the LLM
+const systemPrompt = `
+You are an AI agent that needs to analyze a tweet and determine if it is positively promoting a Solana token. 
+If the tweet contains a Solana token address, return the address. 
+If the tweet does not contain a token address but contains a token symbol, return the symbol after removing any special characters that is prefixed to the token name. The token symbol is usually 3 to 6 characters long and is prefixed by $ and mostly uppercase. 
+If the tweet is not promoting a token or does not contain a token address/symbol, return null.
+Only return the token address, symbol, or null. Do not include any additional text in your response.
+`;
+// Function to find token address using symbol
+function findTokenWithSymbol(symbol) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const response = yield axios_1.default.get("https://cdn.jsdelivr.net/gh/solana-labs/token-list@main/src/tokens/solana.tokenlist.json");
+            // Find the token by symbol (case-insensitive)
+            const tokens = response.data.tokens;
+            const token = tokens.find((token) => token.symbol.trim().toLowerCase() === symbol.trim().toLowerCase());
+            console.log(`Token named ${token.name} found: ${token === null || token === void 0 ? void 0 : token.address}`);
+            return token ? token.address : null; // Return the address if found, otherwise null
+        }
+        catch (error) {
+            console.error("Error fetching token list:", error);
+            return null;
+        }
+    });
+}
+// Plan Phase: Decide what action to take
+function plan(tweetData) {
     return __awaiter(this, void 0, void 0, function* () {
         var _a, _b;
         const chat = yield groq.chat.completions.create({
             messages: [
                 {
                     role: "system",
-                    content: "You are an AI agent that needs to tell me if this tweet is about buying a token. Return me either the address of the solana token, or return me null if you cant find a solana token address in this tweet. Return if the tweet is positively promoting a token. For example it could be a tweet from a user containing lesssgoo, to the moon, bullish, etc. Only return the address of the token if the tweet is positively promoting the token. If the tweet is not promoting a token, return null. Don't write anything else in the response just the token address.",
+                    content: systemPrompt,
                 },
                 { role: "user", content: tweetData },
             ],
             model: "llama-3.3-70b-versatile",
         });
-        return ((_b = (_a = chat.choices[0]) === null || _a === void 0 ? void 0 : _a.message) === null || _b === void 0 ? void 0 : _b.content) || "";
+        const response = ((_b = (_a = chat.choices[0]) === null || _a === void 0 ? void 0 : _a.message) === null || _b === void 0 ? void 0 : _b.content) || "";
+        if (response === "null") {
+            return { action: "returnNull", data: null };
+        }
+        else if (response.startsWith("SOL") || response.length === 44) {
+            // Check for Solana address format
+            return { action: "extractAddress", data: response };
+        }
+        else {
+            return { action: "extractSymbol", data: response };
+        }
+    });
+}
+// Action Phase: Perform the decided action
+function action(planResult) {
+    return __awaiter(this, void 0, void 0, function* () {
+        switch (planResult.action) {
+            case "extractAddress":
+                return planResult.data; // Return the address directly
+            case "extractSymbol":
+                return yield findTokenWithSymbol(planResult.data); // Fetch address using symbol
+            case "returnNull":
+                return null; // Return null
+            default:
+                return null;
+        }
+    });
+}
+// Observe Phase: Evaluate the result and return the final output
+function observe(tweetData) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const planResult = yield plan(tweetData); // Plan
+        const result = yield action(planResult); // Action
+        return result; // Observe
+    });
+}
+// Main function to use the AI agent
+function fetchLLM(tweetData) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield observe(tweetData);
     });
 }

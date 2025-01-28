@@ -8,24 +8,68 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv").config();
+const web3_js_1 = require("@solana/web3.js");
 const fetchLLM_1 = require("./fetchLLM");
-function main() {
+const prompt_sync_1 = __importDefault(require("prompt-sync"));
+const SOL_AMOUNT = 0.00001 * web3_js_1.LAMPORTS_PER_SOL;
+const usePrompt = (0, prompt_sync_1.default)();
+const username = [];
+const tokenAddress = "5D27EZ1prg14zDFfDXZPfebej2Q4mX12VBqLeXdppump";
+// Dummy data for testing LLM
+const tweets = [
+    {
+        description: "Guys let's buy this token 5D27EZ1prg14zDFfDXZPfebej2Q4mX12VBqLeXdppump",
+    },
+    {
+        description: "I am bullish on this HHbkmJw49HLJehxPh2M16EFuF5CKFNxY1HeBYNY4pump",
+    },
+    {
+        description: "We are going to the moon with this $RAY",
+    },
+    {
+        description: "Random tweet with no data",
+    },
+];
+function main(username) {
     return __awaiter(this, void 0, void 0, function* () {
-        //TODO
-        //4 step process
         //1. Fetch tweets from a user/multiple user
-        //   const tweets = await fetchTweets("elonmusk");
+        //   console.log("\n\n 🔍 Fetching tweets from user: ", username);
+        //   const tweets = await fetchTweets(username);
         //   console.log(tweets);
         //2. Send the tweet to AI Agent/LLM and extract the data
-        const exampleTweet = `I am liking this steady climb from the bottom on Butthole coin, forming a nice support leading in to a very bullish week We are just warming up! @thebuttholecoin 
-  CboMcTUYUcy9E6B3yGdFn6aEsGUnYV6yWeoeukw6pump`;
-        const data = (0, fetchLLM_1.fetchLLM)(exampleTweet).then((data) => {
+        //   console.log("🤖 Invoking AI Agent \n\n");
+        //   const address = [];
+        //   console.log(
+        //     "These are the addresses of the tokens fetched from the tweet\n\n:"
+        //   );
+        for (let tweet of tweets) {
+            const data = yield (0, fetchLLM_1.fetchLLM)(tweet.description);
             console.log(data);
-        });
+            // address.push(data);3
+        }
         //3. Use the data to create a txn on blockchain
-        //4. Send the txn to the blockchain
+        //   for (let tokenAddress of address) {
+        //   }
+        //   swapToken(tokenAddress, SOL_AMOUNT);
+        // console.log(await findTokenWithSymbol("BENJI"))
     });
 }
-main();
+// while (true) {
+//   const usernameInput = usePrompt("Enter the Twitter/X username: ");
+//   username.push(usernameInput);
+//   const continueInput = usePrompt(
+//     "Do you want to add another username? (y/n): "
+//   );
+//   if (continueInput.toLowerCase() !== "y") {
+//     break; // Exit the loop if the user doesn't say "yes"
+//   }
+// }
+// for (let user of username) {
+// main(user);
+// }
+main("elonmusk");

@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../src/raydium/serum/type.ts"],"sourcesContent":["// 1 | 2 | 3\nexport type SerumVersion = 3;\n"],"mappings":"kWAAA","names":[]}

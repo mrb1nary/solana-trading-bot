@@ -1,0 +1,2 @@
+var t=(r=>(r.ALL="all",r.Strict="strict",r))(t||{}),n=(e=>(e.All="all",e.Standard="standard",e.Concentrated="concentrated",e.AllFarm="allFarm",e.StandardFarm="standardFarm",e.ConcentratedFarm="concentratedFarm",e))(n||{});export{t as JupTokenType,n as PoolFetchType};
+//# sourceMappingURL=type.mjs.map
