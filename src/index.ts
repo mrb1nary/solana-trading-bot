@@ -49,11 +49,11 @@ async function main(username: string) {
   console.log("\n✅ Final List of Unique Addresses:", address);
 
   //3. Use the data to create a txn on blockchain
-  // const solAmtInput = usePrompt("Enter the amount of SOL to swap: ");
-  // SOL_AMOUNT = parseFloat(solAmtInput) * LAMPORTS_PER_SOL;
-  // for (let tokenAddress of address) {
-  //   swapToken(tokenAddress, SOL_AMOUNT);
-  // }
+  const solAmtInput = usePrompt("Enter the amount of SOL to swap: ");
+  SOL_AMOUNT = parseFloat(solAmtInput) * LAMPORTS_PER_SOL;
+  for (let tokenAddress of address) {
+    swapToken(tokenAddress, SOL_AMOUNT);
+  }
 }
 
 while (true) {
@@ -71,3 +71,6 @@ while (true) {
 for (let user of username) {
   main(user);
 }
+
+//Main function to test the code
+main("test");

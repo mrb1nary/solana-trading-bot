@@ -15,35 +15,34 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv").config();
 const web3_js_1 = require("@solana/web3.js");
 const fetchLLM_1 = require("./fetchLLM");
-const fetchTweet_1 = require("./fetchTweet");
+const swapToken_1 = require("./swapToken");
 const prompt_sync_1 = __importDefault(require("prompt-sync"));
 let SOL_AMOUNT = 0.0001 * web3_js_1.LAMPORTS_PER_SOL;
 const usePrompt = (0, prompt_sync_1.default)();
 const username = [];
 // Dummy data for testing LLM
 // const tokenAddress = "5D27EZ1prg14zDFfDXZPfebej2Q4mX12VBqLeXdppump";
-// const tweets = [
-//   {
-//     description:
-//       "Guys let's buy this token 5D27EZ1prg14zDFfDXZPfebej2Q4mX12VBqLeXdppump",
-//   },
-//   {
-//     description:
-//       "I am bullish on this HHbkmJw49HLJehxPh2M16EFuF5CKFNxY1HeBYNY4pump",
-//   },
-//   {
-//     description: "We are going to the moon with this $RAY",
-//   },
-//   {
-//     description: "Random tweet with no data",
-//   },
-// ];
+const tweets = [
+    {
+        description: "Guys let's buy this token 5D27EZ1prg14zDFfDXZPfebej2Q4mX12VBqLeXdppump",
+    },
+    //   {
+    //     description:
+    //       "I am bullish on this HHbkmJw49HLJehxPh2M16EFuF5CKFNxY1HeBYNY4pump",
+    //   },
+    //   {
+    //     description: "We are going to the moon with this $RAY",
+    //   },
+    //   {
+    //     description: "Random tweet with no data",
+    //   },
+];
 function main(username) {
     return __awaiter(this, void 0, void 0, function* () {
         //1. Fetch tweets from a user/multiple user
-        console.log("\n\n 🔍 Fetching tweets from user: ", username);
-        const tweets = yield (0, fetchTweet_1.fetchTweets)(username);
-        console.log(tweets);
+        // console.log("\n\n 🔍 Fetching tweets from user: ", username);
+        // const tweets = await fetchTweets(username);
+        // console.log(tweets);
         //2. Send the tweet to AI Agent/LLM and extract the data
         console.log("🤖 Invoking AI Agent \n\n");
         const address = [];
@@ -56,11 +55,11 @@ function main(username) {
         }
         console.log("\n✅ Final List of Unique Addresses:", address);
         //3. Use the data to create a txn on blockchain
-        // const solAmtInput = usePrompt("Enter the amount of SOL to swap: ");
-        // SOL_AMOUNT = parseFloat(solAmtInput) * LAMPORTS_PER_SOL;
-        // for (let tokenAddress of address) {
-        //   swapToken(tokenAddress, SOL_AMOUNT);
-        // }
+        const solAmtInput = usePrompt("Enter the amount of SOL to swap: ");
+        SOL_AMOUNT = parseFloat(solAmtInput) * web3_js_1.LAMPORTS_PER_SOL;
+        for (let tokenAddress of address) {
+            (0, swapToken_1.swapToken)(tokenAddress, SOL_AMOUNT);
+        }
     });
 }
 while (true) {
@@ -71,6 +70,7 @@ while (true) {
         break;
     }
 }
-for (let user of username) {
-    main(user);
-}
+// for (let user of username) {
+//   main(user);
+// }
+main("test");
