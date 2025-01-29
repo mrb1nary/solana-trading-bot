@@ -32,7 +32,6 @@ function findTokenWithSymbol(symbol) {
             // Find the token by symbol (case-insensitive)
             const tokens = response.data.tokens;
             const token = tokens.find((token) => token.symbol.trim().toLowerCase() === symbol.trim().toLowerCase());
-            console.log(`Token named ${token.name} found: ${token === null || token === void 0 ? void 0 : token.address}`);
             return token ? token.address : null; // Return the address if found, otherwise null
         }
         catch (error) {
@@ -58,8 +57,11 @@ function plan(tweetData) {
         const response = ((_b = (_a = chat.choices[0]) === null || _a === void 0 ? void 0 : _a.message) === null || _b === void 0 ? void 0 : _b.content) || "";
         if (response === "null") {
             return { action: "returnNull", data: null };
+            //More edge cases can be added here later or maybe a separate function altogether
         }
-        else if (response.startsWith("SOL") || response.length === 44) {
+        else if (response.endsWith("pump") ||
+            response.length === 44 ||
+            response.length === 43) {
             // Check for Solana address format
             return { action: "extractAddress", data: response };
         }

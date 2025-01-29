@@ -15,7 +15,6 @@ Only return the token address, symbol, or null. Do not include any additional te
 // Function to find token address using symbol
 async function findTokenWithSymbol(symbol: string): Promise<string | null> {
   try {
-    
     const response = await axios.get(
       "https://cdn.jsdelivr.net/gh/solana-labs/token-list@main/src/tokens/solana.tokenlist.json"
     );
@@ -36,9 +35,7 @@ async function findTokenWithSymbol(symbol: string): Promise<string | null> {
 }
 
 // Plan Phase: Decide what action to take
-async function plan(
-  tweetData: string
-): Promise<{
+async function plan(tweetData: string): Promise<{
   action: "extractAddress" | "extractSymbol" | "returnNull";
   data: string | null;
 }> {
@@ -57,7 +54,13 @@ async function plan(
 
   if (response === "null") {
     return { action: "returnNull", data: null };
-  } else if (response.startsWith("SOL") || response.length === 44) {
+
+    //More edge cases can be added here later or maybe a separate function altogether
+  } else if (
+    response.endsWith("pump") ||
+    response.length === 44 ||
+    response.length === 43
+  ) {
     // Check for Solana address format
     return { action: "extractAddress", data: response };
   } else {

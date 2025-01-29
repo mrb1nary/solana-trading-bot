@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.fetchTweets = fetchTweets;
 const axios = require("axios");
-const MAX_TIME_OF_TWEET = 1 * 60 * 60 * 1000; // 60 minutes
+const MAX_TIME_OF_TWEET = 1 * 3 * 60 * 60 * 1000; // 60 minutes
 function fetchTweets(username) {
     return __awaiter(this, void 0, void 0, function* () {
         const options = {
