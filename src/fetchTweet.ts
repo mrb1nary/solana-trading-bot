@@ -6,7 +6,7 @@ interface Tweet {
   description: string;
 }
 
-const MAX_TIME_OF_TWEET = 1*5 * 60 * 60 * 1000; // 60 minutes
+const MAX_TIME_OF_TWEET = 1 * 60 * 60 * 1000; // 60 minutes
 
 export async function fetchTweets(username: string) {
   const options = {
