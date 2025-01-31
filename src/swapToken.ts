@@ -27,9 +27,7 @@ const wallet = Keypair.fromSecretKey(
   bs58.decode(process.env.WALLET_PRIVATE_KEY!)
 );
 
-/**
- * Ensure an Associated Token Account (ATA) exists for the given token.
- */
+
 async function ensureATAExists(tokenAddress: string): Promise<PublicKey> {
   const ata = await getAssociatedTokenAddress(
     new PublicKey(tokenAddress),

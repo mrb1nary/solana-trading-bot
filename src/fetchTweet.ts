@@ -6,9 +6,8 @@ interface Tweet {
   description: string;
 }
 
-const MAX_TIME_OF_TWEET = 1 * 60 * 60 * 1000; // 60 minutes
 
-export async function fetchTweets(username: string) {
+export async function fetchTweets(username: string, MAX_TIME_OF_TWEET: number) {
   const options = {
     method: "GET",
     url: "https://twitter-api45.p.rapidapi.com/timeline.php",
