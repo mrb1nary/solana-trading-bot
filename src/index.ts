@@ -33,29 +33,29 @@ const username: Array<string> = [];
 
 async function main(username: string) {
   //1. Fetch tweets from a user/multiple user
-  // console.log("\n\n 🔍 Fetching tweets from user: ", username);
-  // const tweets = await fetchTweets(username, MAX_TIME_OF_TWEET);
-  // console.log(tweets);
+  console.log("\n\n 🔍 Fetching tweets from user: ", username);
+  const tweets = await fetchTweets(username, MAX_TIME_OF_TWEET);
+  console.log(tweets);
 
   //2. Send the tweet to AI Agent/LLM and extract the data
-  // console.log("🤖 Invoking AI Agent \n\n");
-  // const address: string[] = [];
+  console.log("🤖 Invoking AI Agent \n\n");
+  const address: string[] = [];
 
-  // for (let tweet of tweets) {
-  //   const data = await fetchLLM(tweet.description);
-  //   if (data != null && !address.includes(data)) {
-  //     address.push(data);
-  //   }
-  //   console.log(data);
-  // }
-  // console.log("\n✅ Final List of Unique Addresses:", address);
+  for (let tweet of tweets) {
+    const data = await fetchLLM(tweet.description);
+    if (data != null && !address.includes(data)) {
+      address.push(data);
+    }
+    console.log(data);
+  }
+  console.log("\n✅ Final List of Unique Addresses:", address);
 
   //3. Use the data to create a txn on blockchain
-  // const solAmtInput = usePrompt("Enter the amount of SOL to swap: ");
-  // SOL_AMOUNT = parseFloat(solAmtInput) * LAMPORTS_PER_SOL;
-  // for (let tokenAddress of address) {
-  //   swapToken(tokenAddress, SOL_AMOUNT);
-  // }
+  const solAmtInput = usePrompt("Enter the amount of SOL to swap: ");
+  SOL_AMOUNT = parseFloat(solAmtInput) * LAMPORTS_PER_SOL;
+  for (let tokenAddress of address) {
+    swapToken(tokenAddress, SOL_AMOUNT);
+  }
 
   console.log("Fetching tweets from: ", username);
   console.log("You are inside main function");
